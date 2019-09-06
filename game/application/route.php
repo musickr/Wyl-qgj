@@ -13,4 +13,5 @@ Route::group('player/:versions',function (){
     Route::get('index','api/:versions.player.index/index');
     Route::post('getToken','api/:versions.Token/getToken');
     Route::post('getCode','api/:versions.player.we_chat/getCode');
+    Route::get('getScore','api/:versions.player.game_score/getScore');
 });
