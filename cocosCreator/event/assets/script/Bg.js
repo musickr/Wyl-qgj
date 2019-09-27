@@ -23,7 +23,7 @@ cc.Class({
         //console.log(e.currentTarget)
        //console.log(t.target)
        // console.log(e.getDelta())
-    },
+    }, 
      
     /**
      * 触摸移动事件

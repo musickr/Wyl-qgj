@@ -13,11 +13,12 @@ class WeChat extends Controller
 {
     public function getCode()
     {
+        //初始化request对象
         $request = Request::instance();
-        Cache::set('page',$request->header('referer'));
         $redirectUri = $request->header('Referer');
         $OAuth = config('wechatapi.OAuth')['official_account']['api'];
         $appId = config('we_chat.AppID');
+        //将Code发送到公众号登陆页面
         $url = sprintf($OAuth,$appId,urlencode($redirectUri));
         return $this->renderSuccess(compact('url'));
     }

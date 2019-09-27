@@ -5,23 +5,15 @@ import Game from '@/components/Game'
 import AfficialAccount from '@/components/AfficialAccount'
 import Test from '@/components/Test'
 
-
-const getQueryString = (name) => {
-  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-  var r = window.location.search.substr(1).match(reg);
-  if (r != null) 
-  return unescape(r[2]); 
-  return null;
-} 
-
 Vue.use(Router)
 const router =new Router({
+  mode: 'history',  //去掉url中的#
   routes: [
     {
       path: '/',
       name: 'Game',
       component: Game,
-      meta:{pass: true},
+      meta:{pass: false},
     },
     {
       path: '/AfficialAccount',
@@ -42,14 +34,16 @@ const router =new Router({
 
 // 全局路由守卫
 router.beforeEach((to, from, next) => {
+  //bu检验权限的路由直接跳过
   if(to.meta.pass)
   {
     next();
   }
   else{
+    //需要检验权限的页面进入公众号登陆页
     //console.log(Cookies.get('markToken'));return
     if(Cookies.get('markToken')){
-      console.log(Cookies.get('markToken'))
+      //console.log(Cookies.get('markToken'))
       next()
     }else{
       next({path:'/AfficialAccount'})

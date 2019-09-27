@@ -7,6 +7,10 @@ cc.Class({
             default:null,
         },
         dir:cc.v2(0,0),
+        player:{
+            type:cc.Node,
+            default:null,
+        }
     },
 
     /**
@@ -14,7 +18,7 @@ cc.Class({
      */
     touchStart(e){
         this.move = true
-        //console.log(this.Direction) ;return
+        // console.log(this.Direction) ;return
         let w_pos = e.getLocation()
             ,pos  = this.node.convertToNodeSpaceAR(w_pos) 
             ,len  = pos.mag();
@@ -32,7 +36,8 @@ cc.Class({
      * 屏幕触摸移动
      */
     touchMove(e){
-        //let node = t.target();
+        var anim = this.player.getComponent(cc.Animation);
+        anim.play('Right');//播放指定动画
         let w_pos = e.getLocation()
             ,pos  = this.node.convertToNodeSpaceAR(w_pos) 
             ,len  = pos.mag();//向量
@@ -52,6 +57,8 @@ cc.Class({
     touchEnd(e){
         this.Direction.setPosition(cc.v2(0,0))
         this.move = false
+        var anim = this.player.getComponent(cc.Animation);
+        anim.stop('Right');//播放指定动画
     },
 
     /**

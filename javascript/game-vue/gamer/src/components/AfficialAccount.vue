@@ -4,8 +4,9 @@
 
 <script>
 import Cookies from "js-cookie";
-import Router from 'vue-router'
-import router from '@/router'
+import Router from 'vue-router';
+import router from '@/router';
+
 
 export default {
   name: 'AfficialAccount',
@@ -15,18 +16,35 @@ export default {
     }
   },
   methods:{
-    
+    GetQueryString:(name)=>{
+      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+      var r = window.location.search.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+      return r!=null ?  unescape(r[2]) :  null;
+    }
   },
   created(){
-    this.$api.getCode().then(res => {
-      console.log(res)
-      window.location.href = res.data.url
-      //router.push('/?code=1212121')
-    })
-    .catch(error => {
-      console.log(error)
-      //this.$Message.info(error);
-    })
+    //是否是微信的回调
+    let code = this.GetQueryString('code')
+    if(code){
+      this.$api.token(code)
+      .then(res => {
+        Cookies.set('markToken',res.data.token)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    }else{
+      //发起微信回调的请求
+      this.$api.getCode()
+      .then(res => {
+            console.log(res)
+            window.location.href = res.data.url
+          })
+      .catch(error => {
+            console.log(error)
+          })
+    }
+    
   }
 }
 </script>

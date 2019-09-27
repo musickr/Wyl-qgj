@@ -1,7 +1,10 @@
 <template>
+<div >
+  <p>游戏首页</p>
   <ul>
     <li v-for="(user,index) in userList" :key="index">{{ user.name }}</li>
   </ul>
+</div>
 </template>
 
 <script>
@@ -39,7 +42,7 @@ export default {
   //数据交互一般都是写在这个钩子函数里面 
   
   created(){
-    Cookies.remove();
+    Cookies.remove('markToken');
     //等待微信服务器传送code
     let code = this.getQueryString('code')
     console.log(code)

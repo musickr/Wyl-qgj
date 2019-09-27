@@ -3,6 +3,7 @@
 
 namespace app\api\service;
 
+use app\lib\exception\WeChatException;
 use think\Exception;
 
 class wxToken extends Token
@@ -46,5 +47,16 @@ class wxToken extends Token
                 return $this->grantToken($wxResult);
             }
         }
+    }
+    // 处理微信登陆异常
+    // 那些异常应该返回客户端，那些异常不应该返回客户端
+    // 需要认真思考
+    private function processLoginError($wxResult)
+    {
+        throw new WeChatException(
+            [
+                'msg' => $wxResult['errmsg'],
+                'errorCode' => $wxResult['errcode']
+            ]);
     }
 }

@@ -4,10 +4,6 @@ cc._RF.push(module, 'c2f3elNpUFFNKXNO7mn0rIP', 'Game');
 
 'use strict';
 
-var _cc$Class;
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 // Learn cc.Class:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/class.html
 //  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/class.html
@@ -18,7 +14,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
-cc.Class((_cc$Class = {
+cc.Class({
     extends: cc.Component,
 
     properties: {
@@ -66,15 +62,6 @@ cc.Class((_cc$Class = {
             // },
         } },
 
-    onLoad: function onLoad() {
-        // 获取地平面的 y 轴坐标
-        this.groundY = this.ground.y + this.ground.height / 2;
-        // 生成一个新的星星
-        this.spawnNewStar();
-        // 初始化计分
-        this.score = 0;
-    },
-
     spawnNewStar: function spawnNewStar() {
         // 使用给定的模板在场景中生成一个新节点
         var newStar = cc.instantiate(this.starPrefab);
@@ -97,33 +84,42 @@ cc.Class((_cc$Class = {
         randX = (Math.random() - 0.5) * 2 * maxX;
         // 返回星星坐标
         return cc.v2(randX, randY);
+    },
+    // LIFE-CYCLE CALLBACKS:
+
+    onLoad: function onLoad() {
+        // 初始化计时器
+        this.timer = 0;
+        this.starDuration = 0;
+        // 生成一个新的星星
+        this.spawnNewStar();
+        // 初始化计分
+        this.score = 0;
+    },
+    start: function start() {},
+    update: function update(dt) {
+        // 每帧更新计时器，超过限度还没有生成新的星星
+        // 就会调用游戏失败逻辑
+        if (this.timer > this.starDuration) {
+            this.scoreDisplay.string = "gameOver";
+            this.gameOver();
+            return;
+        }
+        this.timer += dt;
+    },
+
+    gainScore: function gainScore() {
+        this.score += 1;
+        // 更新 scoreDisplay Label 的文字
+        this.scoreDisplay.string = 'Score: ' + this.score;
+        // 播放得分音效
+        cc.audioEngine.playEffect(this.scoreAudio, false);
+    },
+    gameOver: function gameOver() {
+        this.player.stopAllActions(); //停止 player 节点的跳跃动作
+        cc.director.loadScene('game');
     }
-}, _defineProperty(_cc$Class, 'onLoad', function onLoad() {
-    // 初始化计时器
-    this.timer = 0;
-    this.starDuration = 0;
-    // 生成一个新的星星
-    this.spawnNewStar();
-    // 初始化计分
-    this.score = 0;
-}), _defineProperty(_cc$Class, 'start', function start() {}), _defineProperty(_cc$Class, 'update', function update(dt) {
-    // 每帧更新计时器，超过限度还没有生成新的星星
-    // 就会调用游戏失败逻辑
-    if (this.timer > this.starDuration) {
-        this.scoreDisplay.string = "gameOver";
-        this.gameOver();
-        return;
-    }
-    this.timer += dt;
-}), _defineProperty(_cc$Class, 'gainScore', function gainScore() {
-    this.score += 1;
-    // 更新 scoreDisplay Label 的文字
-    this.scoreDisplay.string = 'Score: ' + this.score;
-    // 播放得分音效
-    cc.audioEngine.playEffect(this.scoreAudio, false);
-}), _defineProperty(_cc$Class, 'gameOver', function gameOver() {
-    this.player.stopAllActions(); //停止 player 节点的跳跃动作
-    cc.director.loadScene('game');
-}), _cc$Class));
+
+});
 
 cc._RF.pop();

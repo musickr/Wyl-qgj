@@ -76,7 +76,7 @@ cc.Class({
     },
 
     start () {
-        this.EnableTouch();
+        //this.EnableTouch();
     },
     onCollisionEnter: function (other , self) {
         console.log(self)
@@ -88,17 +88,11 @@ cc.Class({
         other.node.group = "default";//设置碰撞分组，没必要继续判断和鱼钩的碰撞了
         other.node.parent = this.node;//钓到的鱼挂在鱼钩上
         other.node.setPosition(cc.v2(0,-25));
-        other.node.runAction
-        (
-            cc.repeatForever
-            (
-                cc.sequence
-                (
+        other.node.runAction(cc.repeatForever(
+                cc.sequence(
                     cc.rotateTo(0.6, -60 * other.node.scaleX)
                     ,cc.rotateTo(0.5 , -30 * other.node.scaleX)
-                )
-            )
-        );//钓到的鱼挣扎动作
+                )));//钓到的鱼挣扎动作
     },
 
     update (dt) {

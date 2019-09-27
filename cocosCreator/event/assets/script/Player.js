@@ -1,4 +1,5 @@
 var Direction = require("Direction");
+var Jump = require("Jump");
 cc.Class({
     extends: cc.Component,
 
@@ -7,11 +8,11 @@ cc.Class({
             type:Direction,
             default:null,
         },
-        jumpNode:{
-            type:cc.Node,
-            default:null,
-        }
+        speed:0,
     },
+
+   
+
 
     /**
      * 触摸结束
@@ -50,19 +51,6 @@ cc.Class({
     },
    
     update (dt) {
-        console.log(this.jumpNode.node.properties.isJump)
-        if(this.jumpNode.isJump)
-        {
-            // 跳跃上升
-            var jumpUp   = cc.moveBy(this.jumpDuration, cc.v2(0, this.jumpHeight)).easing(cc.easeCubicActionOut());
-            // 下落
-            var jumpDown = cc.moveBy(this.jumpDuration, cc.v2(0, -this.jumpHeight)).easing(cc.easeCubicActionIn());
-            //this.node.runAction(cc.repeatForever(cc.sequence(jumpUp,jumpDown)));
-        }else{
-            this.node.stopAllActions()
-        }
-        // console.log(this.Direction.move)
-        // console.log(this.speed)
         if(this.Direction.dir.mag()<0.5){
             return;
         }
